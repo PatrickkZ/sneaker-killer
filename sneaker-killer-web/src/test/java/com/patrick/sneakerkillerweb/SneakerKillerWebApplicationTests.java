@@ -1,5 +1,6 @@
 package com.patrick.sneakerkillerweb;
 
+import com.patrick.sneakerkillermodel.mapper.SecondKillItemMapper;
 import com.patrick.sneakerkillermodel.mapper.UserMapper;
 import com.patrick.sneakerkillerservice.service.UserService;
 import org.junit.jupiter.api.Test;

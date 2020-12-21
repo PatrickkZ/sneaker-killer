@@ -11,6 +11,7 @@
     <groupId>com.patrick</groupId>
     <artifactId>sneaker-killer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <!-- 多模块项目中父项目的打包方式为pom -->
     <packaging>pom</packaging>
     <name>sneaker-killer</name>
     <description>Demo project for Spring Boot</description>
