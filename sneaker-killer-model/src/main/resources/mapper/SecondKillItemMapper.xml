@@ -15,4 +15,17 @@
     <select id="listAllItemCanSecondSkill" resultMap="secondKillItemMap">
         select * from seckill_item order by start_time
     </select>
+
+    <select id="getByIdAndSize" resultType="SecondKillItem">
+        select a.id, a.item_id as itemId, a.seckill_price as secondKillPrice,
+        a.seckill_stock as secondKillStock, a.start_time as startTime, a.end_time as endTime,
+        (
+        case when (now() between a.start_time and a.end_time and b.stock > 0)
+        then 1
+        else 0
+        end
+        ) as canBuy
+        from seckill_item as a left join sneaker_sku as b on a.item_id = b.item_id
+        where a.item_id = #{id} and b.size = #{size}
+    </select>
 </mapper>

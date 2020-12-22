@@ -19,6 +19,11 @@ public class SneakerItem {
      */
     private Integer stock;
 
+    /**
+     * 所有尺码信息，以逗号分割，如35,36,37,38,39,40
+     */
+    private String size;
+
     public Integer getId() {
         return id;
     }
@@ -65,5 +70,13 @@ public class SneakerItem {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 }

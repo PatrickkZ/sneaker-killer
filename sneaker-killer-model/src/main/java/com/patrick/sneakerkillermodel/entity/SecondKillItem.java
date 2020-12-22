@@ -30,6 +30,12 @@ public class SecondKillItem {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date endTime;
 
+    /**
+     * 是否能够购买 0表示不能 1表示能
+     * 需要满足条件 a:在活动时间内 b:库存大于0
+     */
+    private Integer canBuy;
+
     private SneakerItem sneakerItem;
 
     public Integer getId() {
@@ -86,5 +92,13 @@ public class SecondKillItem {
 
     public void setSneakerItem(SneakerItem sneakerItem) {
         this.sneakerItem = sneakerItem;
+    }
+
+    public Integer isCanBuy() {
+        return canBuy;
+    }
+
+    public void setCanBuy(Integer canBuy) {
+        this.canBuy = canBuy;
     }
 }
