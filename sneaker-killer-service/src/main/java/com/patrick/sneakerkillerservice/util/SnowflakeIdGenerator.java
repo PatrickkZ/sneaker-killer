@@ -1,4 +1,4 @@
-package com.patrick.sneakerkillerweb.util;
+package com.patrick.sneakerkillerservice.util;
 
 /**
  * 使用雪花算法实现全局唯一的订单id

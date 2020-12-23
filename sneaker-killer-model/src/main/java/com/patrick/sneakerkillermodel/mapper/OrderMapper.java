@@ -1,5 +1,6 @@
 package com.patrick.sneakerkillermodel.mapper;
 
+import com.patrick.sneakerkillermodel.entity.Order;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +13,10 @@ public interface OrderMapper {
      * @return
      */
     Integer countByUserIdAndItemId(@Param("itemId") Integer itemId, @Param("userId") Integer userId);
+
+    /**
+     * 添加一条订单记录
+     * @return
+     */
+    int add(Order order);
 }

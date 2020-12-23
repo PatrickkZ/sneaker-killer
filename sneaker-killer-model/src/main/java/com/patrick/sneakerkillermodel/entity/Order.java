@@ -9,7 +9,14 @@ import java.util.Date;
 public class Order {
     private Long id;
     private Integer userId;
-    private Integer skuId;
+    /**
+     * 商品id
+     */
+    private Integer itemId;
+    /**
+     * 尺码
+     */
+    private String shoeSize;
     /**
      * 购买数量
      */
@@ -41,12 +48,12 @@ public class Order {
         this.userId = userId;
     }
 
-    public Integer getSkuId() {
-        return skuId;
+    public Integer getItemId() {
+        return itemId;
     }
 
-    public void setSkuId(Integer skuId) {
-        this.skuId = skuId;
+    public void setItemId(Integer itemId) {
+        this.itemId = itemId;
     }
 
     public Integer getItemCount() {
@@ -87,5 +94,13 @@ public class Order {
 
     public void setPayTime(Date payTime) {
         this.payTime = payTime;
+    }
+
+    public String getShoeSize() {
+        return shoeSize;
+    }
+
+    public void setShoeSize(String shoeSize) {
+        this.shoeSize = shoeSize;
     }
 }
