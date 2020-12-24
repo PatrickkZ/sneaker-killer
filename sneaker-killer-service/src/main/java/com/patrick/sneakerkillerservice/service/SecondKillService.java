@@ -8,10 +8,13 @@ import com.patrick.sneakerkillermodel.mapper.SneakerSkuMapper;
 import com.patrick.sneakerkillerservice.config.PropertiesConfig;
 import com.patrick.sneakerkillerservice.exception.AlreadyBoughtException;
 import com.patrick.sneakerkillerservice.util.SnowflakeIdGenerator;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SecondKillService {
@@ -19,33 +22,60 @@ public class SecondKillService {
     SecondKillItemMapper secondKillItemMapper;
     SneakerSkuMapper sneakerSkuMapper;
     SnowflakeIdGenerator snowflakeIdGenerator;
+    RedissonClient redissonClient;
     PropertiesConfig propertiesConfig = new PropertiesConfig();
 
 
     @Autowired
-    public SecondKillService(OrderMapper orderMapper, SecondKillItemMapper secondKillItemMapper, SneakerSkuMapper sneakerSkuMapper){
+    public SecondKillService(OrderMapper orderMapper, SecondKillItemMapper secondKillItemMapper, SneakerSkuMapper sneakerSkuMapper, RedissonClient redissonClient){
         this.orderMapper = orderMapper;
         this.secondKillItemMapper = secondKillItemMapper;
         this.sneakerSkuMapper = sneakerSkuMapper;
+        this.redissonClient = redissonClient;
         this.snowflakeIdGenerator = new SnowflakeIdGenerator(propertiesConfig.getWorkerId(), propertiesConfig.getDatacenterId());
     }
 
+    /**
+     * 执行秒杀的逻辑
+     * @param itemId
+     * @param size
+     * @param userId
+     * @return
+     * @throws AlreadyBoughtException
+     */
     public boolean executeKill(Integer itemId, String size, Integer userId) throws AlreadyBoughtException {
-        // 先查询该用户有没有购买过, 限制只能买一次
-        Integer buyCount = orderMapper.countByUserIdAndItemId(itemId, userId);
-        if(buyCount <=0 ){
-            // 获取商品信息
-            SecondKillItem secondKillItem = secondKillItemMapper.getByIdAndSize(itemId,size);
-            if(secondKillItem != null && secondKillItem.isCanBuy() == 1){
-                // 库存扣减1
-                int success = sneakerSkuMapper.decreaseStock(itemId, size);
-                if(success > 0){
-                    this.generateOrderAndNotify(userId, itemId, size, secondKillItem.getSecondKillPrice());
-                    return true;
+        // 这相当于对sneaker_sku这张表的一行上锁
+        String lockKey = new StringBuffer().append(itemId).append(size).append("-RedissonLock").toString();
+
+        RLock lock = redissonClient.getLock(lockKey);
+        try {
+            // 分布式锁
+            boolean cache = lock.tryLock(30, 10, TimeUnit.SECONDS);
+
+            if(cache){
+                // 先查询该用户有没有购买过, 限制只能买一次
+                Integer buyCount = orderMapper.countByUserIdAndItemId(itemId, userId);
+                if(buyCount <=0 ){
+                    // 获取商品信息
+                    SecondKillItem secondKillItem = secondKillItemMapper.getByIdAndSize(itemId,size);
+                    if(secondKillItem != null && secondKillItem.isCanBuy() == 1){
+                        // 库存扣减1
+                        int success = sneakerSkuMapper.decreaseStock(itemId, size);
+                        if(success > 0){
+                            this.generateOrderAndNotify(userId, itemId, size, secondKillItem.getSecondKillPrice());
+                            return true;
+                        }
+                    }
+                } else {
+                    throw new AlreadyBoughtException("已抢购成功,每位用户限购一件");
                 }
             }
-        } else {
-            throw new AlreadyBoughtException("已经抢购成功,每位用户限购一件");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            lock.unlock();
         }
         return false;
     }

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.patrick.sneakerkillermodel.mapper.SneakerSkuMapper">
+    <!-- 只有库存数大于0才能扣减 -->
     <update id="decreaseStock">
         update sneaker_sku
-        set stock = stock - 1;
-        where item_id = #{itemId} and size = #{size}
+        set stock = stock - 1
+        where item_id = #{itemId} and size = #{size} and stock > 0
     </update>
 </mapper>

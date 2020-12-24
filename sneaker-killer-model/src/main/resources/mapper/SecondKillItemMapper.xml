@@ -26,6 +26,6 @@
         end
         ) as canBuy
         from seckill_item as a left join sneaker_sku as b on a.item_id = b.item_id
-        where a.item_id = #{id} and b.size = #{size}
+        where a.item_id = #{id} and b.size = #{size} and b.stock > 0
     </select>
 </mapper>
