@@ -28,7 +28,21 @@
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>3.11.4</version>
         </dependency>
+
+        <!-- rabbitMQ -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
+        <!-- 数据校验 -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
     </dependencies>
+
+
 
 <!--    <build>-->
 <!--        <plugins>-->

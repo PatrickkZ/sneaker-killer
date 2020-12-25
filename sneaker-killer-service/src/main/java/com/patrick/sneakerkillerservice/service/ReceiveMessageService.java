@@ -6,10 +6,12 @@ import com.patrick.sneakerkillermodel.mapper.OrderMapper;
 import com.patrick.sneakerkillermodel.mapper.SecondKillItemMapper;
 import com.patrick.sneakerkillermodel.mapper.SneakerSkuMapper;
 import com.patrick.sneakerkillerservice.config.PropertiesConfig;
+import com.patrick.sneakerkillerservice.dto.SecondKillDto;
 import com.patrick.sneakerkillerservice.exception.AlreadyBoughtException;
 import com.patrick.sneakerkillerservice.util.SnowflakeIdGenerator;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +19,7 @@ import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class SecondKillService {
+public class ReceiveMessageService {
     OrderMapper orderMapper;
     SecondKillItemMapper secondKillItemMapper;
     SneakerSkuMapper sneakerSkuMapper;
@@ -27,7 +29,7 @@ public class SecondKillService {
 
 
     @Autowired
-    public SecondKillService(OrderMapper orderMapper, SecondKillItemMapper secondKillItemMapper, SneakerSkuMapper sneakerSkuMapper, RedissonClient redissonClient){
+    public ReceiveMessageService(OrderMapper orderMapper, SecondKillItemMapper secondKillItemMapper, SneakerSkuMapper sneakerSkuMapper, RedissonClient redissonClient){
         this.orderMapper = orderMapper;
         this.secondKillItemMapper = secondKillItemMapper;
         this.sneakerSkuMapper = sneakerSkuMapper;
@@ -36,14 +38,16 @@ public class SecondKillService {
     }
 
     /**
-     * 执行秒杀的逻辑
-     * @param itemId
-     * @param size
-     * @param userId
+     * 执行秒杀逻辑
+     * @param dto
      * @return
      * @throws AlreadyBoughtException
      */
-    public boolean executeKill(Integer itemId, String size, Integer userId) throws AlreadyBoughtException {
+    @RabbitListener(queues = "SecondKillQueue", containerFactory = "multiListenerContainer")
+    public void executeKill(SecondKillDto dto) throws AlreadyBoughtException {
+        Integer itemId = dto.getItemId();
+        String size = dto.getSize();
+        Integer userId = dto.getUserId();
         // 这相当于对sneaker_sku这张表的一行上锁
         String lockKey = new StringBuffer().append(itemId).append(size).append("-RedissonLock").toString();
 
@@ -63,7 +67,6 @@ public class SecondKillService {
                         int success = sneakerSkuMapper.decreaseStock(itemId, size);
                         if(success > 0){
                             this.generateOrderAndNotify(userId, itemId, size, secondKillItem.getSecondKillPrice());
-                            return true;
                         }
                     }
                 } else {
@@ -77,7 +80,6 @@ public class SecondKillService {
         finally {
             lock.unlock();
         }
-        return false;
     }
 
     // TODO 生成订单和异步通知方法

@@ -1,4 +1,4 @@
-package com.patrick.sneakerkillerweb.dto;
+package com.patrick.sneakerkillerservice.dto;
 
 import javax.validation.constraints.NotNull;
 
