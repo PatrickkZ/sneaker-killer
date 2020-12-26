@@ -4,6 +4,7 @@
     <resultMap id="userMap" type="User">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
+        <result column="email" property="email"/>
         <result column="password" property="password"/>
         <result column="salt" property="salt"/>
         <result column="register_date" property="registerDate"/>
@@ -12,4 +13,17 @@
     <select id="listAll" resultMap="userMap">
         select * from sneaker_user
     </select>
+
+    <select id="getByUsername" parameterType="String" resultMap="userMap">
+        select * from sneaker_user where username = #{value}
+    </select>
+
+    <select id="getByEmail" parameterType="String" resultMap="userMap">
+        select * from sneaker_user where email = #{value}
+    </select>
+
+    <insert id="add" parameterType="User">
+        insert into sneaker_user(username, email, password, salt, register_date)
+        values (#{username}, #{email}, #{password}, #{salt}, #{registerDate})
+    </insert>
 </mapper>

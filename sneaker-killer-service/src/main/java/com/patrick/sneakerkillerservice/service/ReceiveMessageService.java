@@ -25,20 +25,21 @@ public class ReceiveMessageService {
     SneakerSkuMapper sneakerSkuMapper;
     SnowflakeIdGenerator snowflakeIdGenerator;
     RedissonClient redissonClient;
-    PropertiesConfig propertiesConfig = new PropertiesConfig();
+    PropertiesConfig propertiesConfig;
 
 
     @Autowired
-    public ReceiveMessageService(OrderMapper orderMapper, SecondKillItemMapper secondKillItemMapper, SneakerSkuMapper sneakerSkuMapper, RedissonClient redissonClient){
+    public ReceiveMessageService(OrderMapper orderMapper, SecondKillItemMapper secondKillItemMapper, SneakerSkuMapper sneakerSkuMapper, RedissonClient redissonClient, PropertiesConfig propertiesConfig){
         this.orderMapper = orderMapper;
         this.secondKillItemMapper = secondKillItemMapper;
         this.sneakerSkuMapper = sneakerSkuMapper;
         this.redissonClient = redissonClient;
-        this.snowflakeIdGenerator = new SnowflakeIdGenerator(propertiesConfig.getWorkerId(), propertiesConfig.getDatacenterId());
+        this.propertiesConfig = propertiesConfig;
+        this.snowflakeIdGenerator = new SnowflakeIdGenerator(this.propertiesConfig.getWorkerId(), this.propertiesConfig.getDatacenterId());
     }
 
     /**
-     * 执行秒杀逻辑
+     * 执行秒杀逻辑, RabbitListener修饰的方法不能有返回值, 必须返回void, 否则报错
      * @param dto
      * @return
      * @throws AlreadyBoughtException

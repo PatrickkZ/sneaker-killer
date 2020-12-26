@@ -8,4 +8,7 @@ import java.util.List;
 @Repository
 public interface UserMapper {
     List<User> listAll();
+    User getByUsername(String username);
+    User getByEmail(String email);
+    int add(User user);
 }
