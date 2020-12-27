@@ -20,7 +20,6 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @CrossOrigin
     @GetMapping("/all")
     public Result listAll(){
         List<SecondKillItem> items = itemService.getAllSecondKillItem();

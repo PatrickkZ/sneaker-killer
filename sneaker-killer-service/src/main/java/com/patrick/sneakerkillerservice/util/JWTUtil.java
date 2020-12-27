@@ -18,7 +18,7 @@ public class JWTUtil {
      * @return 加密的token
      */
     public static String sign(String username, PropertiesConfig propertiesConfig) {
-        Date date = new Date(System.currentTimeMillis());
+        Date date = new Date(System.currentTimeMillis() + propertiesConfig.getExpireTime());
         Algorithm algorithm = Algorithm.HMAC256(propertiesConfig.getSecret());
         // 附带username信息
         return JWT.create()
