@@ -4,6 +4,8 @@ import com.patrick.sneakerkillermodel.entity.Order;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface OrderMapper {
     /**
@@ -23,4 +25,6 @@ public interface OrderMapper {
     Order getById(Long id);
 
     void expireOrder(Long orderId);
+
+    List<Order> getByUserId(Integer userId);
 }

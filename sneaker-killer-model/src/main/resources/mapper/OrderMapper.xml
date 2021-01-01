@@ -14,6 +14,20 @@
         <result column="pay_time" property="payTime"/>
     </resultMap>
 
+    <resultMap id="orderMap2" type="Order">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="item_id" property="itemId"/>
+        <result column="shoe_size" property="shoeSize"/>
+        <result column="item_count" property="itemCount"/>
+        <result column="item_price" property="itemPrice"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="pay_time" property="payTime"/>
+        <association property="itemName" column="item_id" select="com.patrick.sneakerkillermodel.mapper.SneakerItemMapper.getNameById">
+        </association>
+    </resultMap>
+
     <select id="countByUserIdAndItemId" resultType="Integer">
         select count(*)
         from order_info
@@ -22,6 +36,10 @@
 
     <select id="getById" parameterType="Long" resultMap="orderMap">
         select * from order_info where id = #{value}
+    </select>
+
+    <select id="getByUserId" parameterType="Integer" resultMap="orderMap2">
+        select * from order_info where user_id = #{value}
     </select>
 
     <update id="expireOrder" parameterType="Long">
