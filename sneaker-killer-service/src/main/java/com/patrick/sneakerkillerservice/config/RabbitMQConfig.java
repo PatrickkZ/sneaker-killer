@@ -7,12 +7,44 @@ import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Configuration
 public class RabbitMQConfig {
+
+    @Value("${rabbitmq.order.queue}")
+    private String orderQueue;
+
+    @Value("${rabbitmq.order.exchange}")
+    private String orderExchange;
+
+    @Value("${rabbitmq.order.routing-key}")
+    private String orderKey;
+
+    @Value("${rabbitmq.order.dead.queue}")
+    private String orderDeadQueue;
+
+    @Value("${rabbitmq.order.dead.exchange}")
+    private String orderDeadExchange;
+
+    @Value("${rabbitmq.order.dead.routing-key}")
+    private String orderDeadKey;
+
+    @Value("${rabbit.second-kill.request.queue}")
+    private String secondKillQueue;
+
+    @Value("${rabbit.second-kill.request.exchange}")
+    private String secondKillExchange;
+
+    @Value("${rabbit.second-kill.request.routing-key}")
+    private String secondKillKey;
+
 
     CachingConnectionFactory connectionFactory;
     SimpleRabbitListenerContainerFactoryConfigurer factoryConfigurer;
@@ -58,21 +90,71 @@ public class RabbitMQConfig {
         return factory;
     }
 
-    // 队列 起名：SecondKillQueue
+    /**
+     * 这里开始是死信队列
+     * @return
+     */
+    @Bean
+    public Queue orderQueue(){
+        Map<String, Object> argsMap= new HashMap<>();
+        argsMap.put("x-dead-letter-exchange", orderDeadExchange);
+        argsMap.put("x-dead-letter-routing-key", orderDeadKey);
+        return new Queue(orderQueue, true, false, false, argsMap);
+    }
+
+    /**
+     * 基本交换机
+     * @return
+     */
+    @Bean
+    public DirectExchange orderExchange(){
+        return new DirectExchange(orderExchange, true, false);
+    }
+
+    /**
+     * 基本交换机+基本路由 to 死信队列
+     * @return
+     */
+    @Bean
+    public Binding orderBinding(){
+        return BindingBuilder.bind(orderQueue()).to(orderExchange()).with(orderKey);
+    }
+
+    /**
+     * 这里开始是真正处理消息的队列
+     * @return
+     */
+    @Bean
+    public Queue orderDeadQueue(){
+        return new Queue(orderDeadQueue, true);
+    }
+
+    @Bean
+    public DirectExchange orderDeadExchange(){
+        return new DirectExchange(orderDeadExchange, true, false);
+    }
+
+    @Bean
+    public Binding deadBinding(){
+        return BindingBuilder.bind(orderDeadQueue()).to(orderDeadExchange()).with(orderDeadKey);
+    }
+
+    /**
+     * 这里开始是接口限流的消息队列
+     * @return
+     */
     @Bean
     public Queue SecondKillQueue() {
-        return new Queue("SecondKillQueue",true);
+        return new Queue(secondKillQueue,true);
     }
 
-    // Direct交换机 起名：SecondKillExchange
     @Bean
     DirectExchange SecondKillExchange() {
-        return new DirectExchange("SecondKillExchange",true,false);
+        return new DirectExchange(secondKillExchange,true,false);
     }
 
-    //绑定  将队列和交换机绑定, 并设置用于匹配键：second-kill
     @Bean
     Binding bindingDirect() {
-        return BindingBuilder.bind(SecondKillQueue()).to(SecondKillExchange()).with("second-kill");
+        return BindingBuilder.bind(SecondKillQueue()).to(SecondKillExchange()).with(secondKillKey);
     }
 }

@@ -19,4 +19,8 @@ public interface OrderMapper {
      * @return
      */
     int add(Order order);
+
+    Order getById(Long id);
+
+    void expireOrder(Long orderId);
 }

@@ -10,10 +10,23 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.AbstractJavaTypeMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SendMessageService {
+
+    @Value("${rabbit.second-kill.request.exchange}")
+    private String secondKillExchange;
+
+    @Value("${rabbit.second-kill.request.routing-key}")
+    private String secondKillKey;
+
+    @Value("${rabbitmq.order.exchange}")
+    private String orderExchange;
+
+    @Value("${rabbitmq.order.routing-key}")
+    private String orderKey;
 
     RabbitTemplate rabbitTemplate;
 
@@ -26,9 +39,9 @@ public class SendMessageService {
         try {
             if(secondKillDto != null){
                 rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
-                rabbitTemplate.setExchange("SecondKillExchange");
-                rabbitTemplate.setRoutingKey("second-kill");
-                rabbitTemplate.convertAndSend("SecondKillExchange", "second-kill", secondKillDto
+                rabbitTemplate.setExchange(secondKillExchange);
+                rabbitTemplate.setRoutingKey(secondKillKey);
+                rabbitTemplate.convertAndSend(secondKillDto
                         , message -> {
                             MessageProperties mp=message.getMessageProperties();
                             mp.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
@@ -38,6 +51,28 @@ public class SendMessageService {
             }
         }catch (Exception e){
             // TODO 改log
+            System.out.println("消息发送异常");
+        }
+    }
+
+    // TODO setHeader?
+    public void sendMessageToDeadQueue(Long orderId){
+        try {
+            if(orderId != null){
+                rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
+                rabbitTemplate.setExchange(orderExchange);
+                rabbitTemplate.setRoutingKey(orderKey);
+                rabbitTemplate.convertAndSend(orderId
+                        , message -> {
+                            MessageProperties mp=message.getMessageProperties();
+                            mp.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+                            mp.setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME,SecondKillDto.class);
+                            // TODO 设置过期时间 测试设置为10s
+                            mp.setExpiration("10000");
+                            return message;
+                        });
+            }
+        }catch (Exception e){
             System.out.println("消息发送异常");
         }
     }
