@@ -32,24 +32,15 @@ public class JWTUtil {
      * @param token 密钥
      * @return 是否正确
      */
-    public static boolean verify(String token, PropertiesConfig propertiesConfig) throws Exception {
+    public static boolean verify(String token, PropertiesConfig propertiesConfig){
         try {
             Algorithm algorithm = Algorithm.HMAC256(propertiesConfig.getSecret());
             JWTVerifier verifier = JWT.require(algorithm).build();
             verifier.verify(token);
             return true;
-        } catch (TokenExpiredException tokenExpiredException){
-            throw new Exception(JwtVerifyConst.EXPIRED);
-        } catch (SignatureVerificationException signatureVerificationException){
-            System.out.println("token验证失败");
-            throw new Exception(JwtVerifyConst.SIGNATURE_VERIFICATION);
-        } catch (JWTDecodeException jwtDecodeException){
-            System.out.println("token解析失败");
-            throw new Exception(JwtVerifyConst.DECODE_ERROR);
         }
-        catch (Exception exception) {
-            exception.printStackTrace();
-            throw new Exception(JwtVerifyConst.NOT_LOGIN);
+        catch (Exception e) {
+            return false;
         }
     }
 

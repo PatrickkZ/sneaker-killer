@@ -64,12 +64,8 @@ public class ShiroRealm extends AuthorizingRealm {
         if(user == null){
             throw new AuthenticationException("user not exist");
         }
-        try {
-            if(!JWTUtil.verify(token, propertiesConfig)){
-                throw new AuthenticationException("token verify error");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!JWTUtil.verify(token, propertiesConfig)) {
+            throw new AuthenticationException("token verify error");
         }
         return new SimpleAuthenticationInfo(token, token, getName());
     }

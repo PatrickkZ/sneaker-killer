@@ -4,6 +4,7 @@ import com.patrick.sneakerkillerservice.service.OrderService;
 import com.patrick.sneakerkillerservice.service.UserService;
 import com.patrick.sneakerkillerweb.result.Result;
 import com.patrick.sneakerkillerweb.result.ResultFactory;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/order")
+    @RequiresAuthentication
     public Result getOrder(){
         // TODO 测试，用户先用2
         return ResultFactory.buildSuccessResult(orderService.getByUserId(2));

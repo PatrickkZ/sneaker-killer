@@ -4,6 +4,7 @@ import com.patrick.sneakerkillerservice.dto.SecondKillDto;
 import com.patrick.sneakerkillerservice.service.SendMessageService;
 import com.patrick.sneakerkillerweb.result.Result;
 import com.patrick.sneakerkillerweb.result.ResultFactory;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ public class SecondKillController {
     }
 
     @PostMapping(value = "/item/order")
+    @RequiresAuthentication
     public Result executeKill(@RequestBody @Validated SecondKillDto dto, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return ResultFactory.buildFailResult("invalid parameter");
