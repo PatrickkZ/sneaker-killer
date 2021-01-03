@@ -10,5 +10,6 @@ public interface UserMapper {
     List<User> listAll();
     User getByUsername(String username);
     User getByEmail(String email);
+    String getMailById(Integer id);
     int add(User user);
 }

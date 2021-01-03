@@ -28,6 +28,15 @@ public class SendMessageService {
     @Value("${rabbitmq.order.routing-key}")
     private String orderKey;
 
+    @Value("${rabbit.mail.exchange}")
+    private String sendMailExchange;
+
+    @Value("${rabbit.mail.routing-key}")
+    private String sendMailKey;
+
+    @Value("${order.expire-time}")
+    private String orderExpireTime;
+
     RabbitTemplate rabbitTemplate;
 
     @Autowired
@@ -55,6 +64,26 @@ public class SendMessageService {
         }
     }
 
+    public void sendMessageToMailMQ(String toMail){
+        try {
+            if(toMail != null){
+                rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
+                rabbitTemplate.setExchange(sendMailExchange);
+                rabbitTemplate.setRoutingKey(sendMailKey);
+                rabbitTemplate.convertAndSend(toMail
+                        , message -> {
+                            MessageProperties mp=message.getMessageProperties();
+                            mp.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+                            mp.setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME,String.class);
+                            return message;
+                        });
+            }
+        }catch (Exception e){
+            // TODO 改log
+            System.out.println("消息发送异常");
+        }
+    }
+
     // TODO setHeader?
     public void sendMessageToDeadQueue(Long orderId){
         try {
@@ -67,8 +96,8 @@ public class SendMessageService {
                             MessageProperties mp=message.getMessageProperties();
                             mp.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
                             mp.setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME,SecondKillDto.class);
-                            // TODO 设置过期时间 测试设置为10s
-                            mp.setExpiration("10000");
+                            // TODO 设置过期时间 测试设置为30s
+                            mp.setExpiration(orderExpireTime);
                             return message;
                         });
             }

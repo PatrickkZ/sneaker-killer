@@ -45,6 +45,15 @@ public class RabbitMQConfig {
     @Value("${rabbit.second-kill.request.routing-key}")
     private String secondKillKey;
 
+    @Value("${rabbit.mail.queue}")
+    private String sendMailQueue;
+
+    @Value("${rabbit.mail.exchange}")
+    private String sendMailExchange;
+
+    @Value("${rabbit.mail.routing-key}")
+    private String sendMailKey;
+
 
     CachingConnectionFactory connectionFactory;
     SimpleRabbitListenerContainerFactoryConfigurer factoryConfigurer;
@@ -156,5 +165,23 @@ public class RabbitMQConfig {
     @Bean
     Binding bindingDirect() {
         return BindingBuilder.bind(SecondKillQueue()).to(SecondKillExchange()).with(secondKillKey);
+    }
+
+    /**
+     * 这里开始是发邮件的队列
+     */
+    @Bean
+    public Queue sendMailQueue() {
+        return new Queue(sendMailQueue, true);
+    }
+
+    @Bean
+    public DirectExchange sendMailExchange(){
+        return new DirectExchange(sendMailExchange, true, false);
+    }
+
+    @Bean
+    public Binding mailBinding(){
+        return BindingBuilder.bind(sendMailQueue()).to(sendMailExchange()).with(sendMailKey);
     }
 }

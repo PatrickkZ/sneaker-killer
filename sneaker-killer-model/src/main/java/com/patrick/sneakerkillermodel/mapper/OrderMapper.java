@@ -27,4 +27,6 @@ public interface OrderMapper {
     void expireOrder(Long orderId);
 
     List<Order> getByUserId(Integer userId);
+
+    void payOrder(Long orderId);
 }

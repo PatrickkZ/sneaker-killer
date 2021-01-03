@@ -48,8 +48,9 @@ public class LoginController {
             return ResultFactory.buildFailResult(bindingResult.getFieldError().getDefaultMessage());
         }
         // 验证成功,生成token返回
-        if(userService.handleLogin(loginDto.getUsername(), loginDto.getPassword())){
-            return ResultFactory.buildSuccessResult(JWTUtil.sign(loginDto.getUsername(), propertiesConfig));
+        Integer userId = userService.handleLogin(loginDto.getUsername(), loginDto.getPassword());
+        if(!(userId < 0)){
+            return ResultFactory.buildSuccessResult(JWTUtil.sign(userId, loginDto.getUsername(), propertiesConfig));
         }
         return ResultFactory.buildFailResult("用户名或密码错误");
     }

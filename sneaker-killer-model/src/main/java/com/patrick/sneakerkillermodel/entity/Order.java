@@ -2,6 +2,9 @@ package com.patrick.sneakerkillermodel.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -9,6 +12,8 @@ import java.util.Date;
  * 订单
  */
 public class Order {
+
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     private Integer userId;
     /**

@@ -19,4 +19,13 @@ public class OrderService {
     public List<Order> getByUserId(Integer userId){
         return orderMapper.getByUserId(userId);
     }
+
+    public boolean payOrder(Long orderId){
+        Order order = orderMapper.getById(orderId);
+        if(order.getStatus() != 0){
+            return false;
+        }
+        orderMapper.payOrder(orderId);
+        return true;
+    }
 }

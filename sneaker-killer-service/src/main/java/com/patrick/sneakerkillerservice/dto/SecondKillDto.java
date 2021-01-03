@@ -15,9 +15,8 @@ public class SecondKillDto {
     @NotNull(message = "shoe size can not be null")
     private String size;
     /**
-     * 用户id TODO 后面可以去掉
+     * 用户id,从token中获取，不需要校验
      */
-    @NotNull
     private Integer userId;
 
     public Integer getItemId() {

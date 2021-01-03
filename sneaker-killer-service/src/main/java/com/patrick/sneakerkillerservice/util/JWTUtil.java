@@ -3,8 +3,6 @@ package com.patrick.sneakerkillerservice.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.patrick.sneakerkillerservice.config.PropertiesConfig;
@@ -14,14 +12,16 @@ import java.util.Date;
 public class JWTUtil {
     /**
      * 生成签名,15min后过期
+     * @param userId 用户id
      * @param username 用户名
      * @return 加密的token
      */
-    public static String sign(String username, PropertiesConfig propertiesConfig) {
+    public static String sign(Integer userId, String username, PropertiesConfig propertiesConfig) {
         Date date = new Date(System.currentTimeMillis() + propertiesConfig.getExpireTime());
         Algorithm algorithm = Algorithm.HMAC256(propertiesConfig.getSecret());
-        // 附带username信息
+        // 附带userId信息
         return JWT.create()
+                .withClaim("userId", userId)
                 .withClaim("username", username)
                 .withExpiresAt(date)
                 .sign(algorithm);
@@ -52,6 +52,19 @@ public class JWTUtil {
         try {
             DecodedJWT jwt = JWT.decode(token);
             return jwt.getClaim("username").asString();
+        } catch (JWTDecodeException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获得token中的信息
+     * @return token中包含的用户id
+     */
+    public static Integer getUserId(String token) {
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            return jwt.getClaim("userId").asInt();
         } catch (JWTDecodeException e) {
             return null;
         }

@@ -57,14 +57,18 @@ public class UserService {
         }
     }
 
-    public boolean handleLogin(String username, String password){
+    public Integer handleLogin(String username, String password){
         User user = userMapper.getByUsername(username);
         if(user == null){
-            return false;
+            return -1;
         }
         String salt = user.getSalt();
         int times = 2;
         String encodePassword = new SimpleHash("md5", password, salt, times).toString();
-        return encodePassword.equals(user.getPassword());
+        if(encodePassword.equals(user.getPassword())){
+            return user.getId();
+        }else {
+            return -1;
+        }
     }
 }

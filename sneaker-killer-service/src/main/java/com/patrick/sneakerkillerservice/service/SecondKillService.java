@@ -5,6 +5,7 @@ import com.patrick.sneakerkillermodel.entity.SecondKillItem;
 import com.patrick.sneakerkillermodel.mapper.OrderMapper;
 import com.patrick.sneakerkillermodel.mapper.SecondKillItemMapper;
 import com.patrick.sneakerkillermodel.mapper.SneakerSkuMapper;
+import com.patrick.sneakerkillermodel.mapper.UserMapper;
 import com.patrick.sneakerkillerservice.config.PropertiesConfig;
 import com.patrick.sneakerkillerservice.exception.AlreadyBoughtException;
 import com.patrick.sneakerkillerservice.util.SnowflakeIdGenerator;
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class SecondKillService {
 
     OrderMapper orderMapper;
+    UserMapper userMapper;
     SecondKillItemMapper secondKillItemMapper;
     SneakerSkuMapper sneakerSkuMapper;
     SnowflakeIdGenerator snowflakeIdGenerator;
@@ -28,8 +30,9 @@ public class SecondKillService {
     SendMessageService sendMessageService;
 
     @Autowired
-    public SecondKillService(OrderMapper orderMapper, SecondKillItemMapper secondKillItemMapper, SneakerSkuMapper sneakerSkuMapper, RedissonClient redissonClient, PropertiesConfig propertiesConfig, SendMessageService sendMessageService){
+    public SecondKillService(OrderMapper orderMapper, UserMapper userMapper, SecondKillItemMapper secondKillItemMapper, SneakerSkuMapper sneakerSkuMapper, RedissonClient redissonClient, PropertiesConfig propertiesConfig, SendMessageService sendMessageService){
         this.orderMapper = orderMapper;
+        this.userMapper = userMapper;
         this.secondKillItemMapper = secondKillItemMapper;
         this.sneakerSkuMapper = sneakerSkuMapper;
         this.redissonClient = redissonClient;
@@ -91,8 +94,9 @@ public class SecondKillService {
         if(orderMapper.countByUserIdAndItemId(itemId, userId)<=0){
             int number = orderMapper.add(order);
             if(number > 0){
-                // TODO 发邮件通知
                 sendMessageService.sendMessageToDeadQueue(order.getId());
+                // 发消息到邮件队列
+                sendMessageService.sendMessageToMailMQ(userMapper.getMailById(userId));
             }
         }
     }

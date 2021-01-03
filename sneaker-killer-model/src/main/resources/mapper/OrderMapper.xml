@@ -48,6 +48,12 @@
         where id = #{value} and status = 0
     </update>
 
+    <update id="payOrder" parameterType="Long">
+        update order_info
+        set status = 1
+        where id = #{value} and status = 0
+    </update>
+
     <insert id="add" parameterType="Order">
         insert into order_info(id, user_id, item_id, shoe_size, item_count, item_price, status, create_time)
         values (#{id}, #{userId}, #{itemId}, #{shoeSize}, #{itemCount}, #{itemPrice}, #{status}, now())

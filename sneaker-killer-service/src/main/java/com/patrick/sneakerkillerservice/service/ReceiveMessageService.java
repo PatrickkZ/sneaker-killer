@@ -11,13 +11,15 @@ import org.springframework.stereotype.Service;
 public class ReceiveMessageService {
 
     SecondKillService secondKillService;
+    SendMailService sendMailService;
     OrderMapper orderMapper;
 
 
     @Autowired
-    public ReceiveMessageService(SecondKillService secondKillService, OrderMapper orderMapper){
+    public ReceiveMessageService(SecondKillService secondKillService, OrderMapper orderMapper, SendMailService sendMailService){
         this.secondKillService = secondKillService;
         this.orderMapper = orderMapper;
+        this.sendMailService = sendMailService;
     }
 
     /**
@@ -41,6 +43,7 @@ public class ReceiveMessageService {
      */
     @RabbitListener(queues = "${rabbitmq.order.dead.queue}", containerFactory = "multiListenerContainer")
     public void expireOrder(Long orderId){
+        System.out.println("订单过期消息处理");
         if(orderId != null){
             Order order = orderMapper.getById(orderId);
             if(order != null && order.getStatus() == 0){
@@ -48,6 +51,16 @@ public class ReceiveMessageService {
                 orderMapper.expireOrder(orderId);
             }
         }
+    }
+
+    /**
+     * 向用户发邮件
+     * @param toMail 用户邮箱
+     */
+    @RabbitListener(queues = "${rabbit.mail.queue}", containerFactory = "multiListenerContainer")
+    public void sendMail(String toMail){
+        System.out.println("正在发邮件");
+        sendMailService.sendMail(toMail);
     }
 
 }

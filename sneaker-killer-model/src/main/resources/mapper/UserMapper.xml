@@ -18,6 +18,10 @@
         select * from sneaker_user where username = #{value}
     </select>
 
+    <select id="getMailById" parameterType="Integer" resultType="String">
+        select email from sneaker_user where id = #{value}
+    </select>
+
     <select id="getByEmail" parameterType="String" resultMap="userMap">
         select * from sneaker_user where email = #{value}
     </select>
