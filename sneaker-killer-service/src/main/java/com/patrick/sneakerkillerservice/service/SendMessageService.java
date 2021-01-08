@@ -1,10 +1,11 @@
 package com.patrick.sneakerkillerservice.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.patrick.sneakerkillerservice.dto.SecondKillDto;
-import org.springframework.amqp.AmqpException;
-import org.springframework.amqp.core.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.MessageDeliveryMode;
-import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.AbstractJavaTypeMapper;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SendMessageService {
+    private static final Logger logger = LoggerFactory.getLogger(SendMessageService.class);
 
     @Value("${rabbit.second-kill.request.exchange}")
     private String secondKillExchange;
@@ -57,10 +59,10 @@ public class SendMessageService {
                             mp.setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME,SecondKillDto.class);
                             return message;
                         });
+                logger.info("发送消息:{}", JSONObject.toJSONString(secondKillDto, SerializerFeature.WriteMapNullValue));
             }
         }catch (Exception e){
-            // TODO 改log
-            System.out.println("消息发送异常");
+            logger.error("消息发送异常,消息内容{}", JSONObject.toJSONString(secondKillDto, SerializerFeature.WriteMapNullValue));
         }
     }
 
@@ -77,10 +79,10 @@ public class SendMessageService {
                             mp.setHeader(AbstractJavaTypeMapper.DEFAULT_CONTENT_CLASSID_FIELD_NAME,String.class);
                             return message;
                         });
+                logger.info("发送消息: {}", toMail);
             }
         }catch (Exception e){
-            // TODO 改log
-            System.out.println("消息发送异常");
+            logger.error("邮件消息异常,toMail: {}", toMail);
         }
     }
 
@@ -100,9 +102,10 @@ public class SendMessageService {
                             mp.setExpiration(orderExpireTime);
                             return message;
                         });
+                logger.info("发送消息订单id{}",orderId);
             }
         }catch (Exception e){
-            System.out.println("消息发送异常");
+            logger.error("发送死信队列异常,订单编号为:{}", orderId);
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.patrick.sneakerkillerservice.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.patrick.sneakerkillermodel.entity.Order;
 import com.patrick.sneakerkillermodel.entity.SecondKillItem;
 import com.patrick.sneakerkillermodel.mapper.OrderMapper;
@@ -11,6 +13,8 @@ import com.patrick.sneakerkillerservice.exception.AlreadyBoughtException;
 import com.patrick.sneakerkillerservice.util.SnowflakeIdGenerator;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class SecondKillService {
+    private static final Logger logger = LoggerFactory.getLogger(SecondKillService.class);
 
     OrderMapper orderMapper;
     UserMapper userMapper;
@@ -59,11 +64,13 @@ public class SecondKillService {
                     if(secondKillItem != null && secondKillItem.isCanBuy() == 1){
                         // 库存扣减1
                         int success = sneakerSkuMapper.decreaseStock(itemId, size);
+                        logger.info("库存扣减成功 userId:{}, itemId: {}, size: {}", userId, itemId, size);
                         if(success > 0){
                             this.generateOrderAndNotify(userId, itemId, size, secondKillItem.getSecondKillPrice());
                         }
                     }
                 } else {
+                    logger.error("用户重复购买userId:{},itemId{}", userId, itemId);
                     throw new AlreadyBoughtException("已抢购成功,每位用户限购一件");
                 }
             }
@@ -76,7 +83,14 @@ public class SecondKillService {
         }
     }
 
-    // TODO 生成订单和异步通知方法
+    /**
+     * 生成订单和异步邮件通知
+     *
+     * @param userId
+     * @param itemId
+     * @param shoeSize
+     * @param secondKillPrice
+     */
     private void generateOrderAndNotify(Integer userId, Integer itemId, String shoeSize, BigDecimal secondKillPrice){
         Order order = new Order();
         // 初始化订单
@@ -89,10 +103,12 @@ public class SecondKillService {
         order.setItemPrice(secondKillPrice);
         // 刚创建订单, 默认未支付状态
         order.setStatus(0);
+        logger.info("创建订单:{}", JSONObject.toJSONString(order, SerializerFeature.WriteMapNullValue));
 
         // 再检查一次
         if(orderMapper.countByUserIdAndItemId(itemId, userId)<=0){
             int number = orderMapper.add(order);
+            logger.info("订单入库:orderID:{}",order.getId());
             if(number > 0){
                 sendMessageService.sendMessageToDeadQueue(order.getId());
                 // 发消息到邮件队列

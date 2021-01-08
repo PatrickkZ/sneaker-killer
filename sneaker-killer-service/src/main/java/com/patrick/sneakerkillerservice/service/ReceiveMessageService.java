@@ -3,12 +3,15 @@ package com.patrick.sneakerkillerservice.service;
 import com.patrick.sneakerkillermodel.entity.Order;
 import com.patrick.sneakerkillermodel.mapper.OrderMapper;
 import com.patrick.sneakerkillerservice.dto.SecondKillDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ReceiveMessageService {
+    private static final Logger logger = LoggerFactory.getLogger(ReceiveMessageService.class);
 
     SecondKillService secondKillService;
     SendMailService sendMailService;
@@ -43,11 +46,10 @@ public class ReceiveMessageService {
      */
     @RabbitListener(queues = "${rabbitmq.order.dead.queue}", containerFactory = "multiListenerContainer")
     public void expireOrder(Long orderId){
-        System.out.println("订单过期消息处理");
         if(orderId != null){
             Order order = orderMapper.getById(orderId);
             if(order != null && order.getStatus() == 0){
-                System.out.println("处理订单过期");
+                logger.info("订单超时未支付, 订单编号:{}", orderId);
                 orderMapper.expireOrder(orderId);
             }
         }
@@ -59,7 +61,7 @@ public class ReceiveMessageService {
      */
     @RabbitListener(queues = "${rabbit.mail.queue}", containerFactory = "multiListenerContainer")
     public void sendMail(String toMail){
-        System.out.println("正在发邮件");
+        logger.info("发送邮件至:{}",toMail);
         sendMailService.sendMail(toMail);
     }
 

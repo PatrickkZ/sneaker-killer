@@ -5,7 +5,6 @@ package com.patrick.sneakerkillermodel.entity;
  * 如运动鞋有不同的尺码
  */
 public class SneakerSku {
-    private Integer id;
     /**
      * 商品id
      */
@@ -18,16 +17,6 @@ public class SneakerSku {
      * 某个尺码的商品的库存
      */
     private Integer stock;
-
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Integer getItemId() {
         return itemId;

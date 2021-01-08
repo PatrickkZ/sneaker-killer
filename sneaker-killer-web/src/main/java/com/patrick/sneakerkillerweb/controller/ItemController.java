@@ -4,7 +4,6 @@ import com.patrick.sneakerkillermodel.entity.SecondKillItem;
 import com.patrick.sneakerkillerservice.service.ItemService;
 import com.patrick.sneakerkillerweb.result.Result;
 import com.patrick.sneakerkillerweb.result.ResultFactory;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

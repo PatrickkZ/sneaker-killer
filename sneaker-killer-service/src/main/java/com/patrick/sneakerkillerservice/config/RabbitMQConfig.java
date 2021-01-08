@@ -1,5 +1,7 @@
 package com.patrick.sneakerkillerservice.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -17,6 +19,7 @@ import java.util.Map;
 
 @Configuration
 public class RabbitMQConfig {
+    private static final Logger logger = LoggerFactory.getLogger(RabbitMQConfig.class);
 
     @Value("${rabbitmq.order.queue}")
     private String orderQueue;
@@ -71,13 +74,13 @@ public class RabbitMQConfig {
         rabbitTemplate.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
             @Override
             public void confirm(CorrelationData correlationData, boolean ack, String cause) {
-                System.out.println("消息发送成功");
+                logger.info("消息发送成功:{}",correlationData);
             }
         });
         rabbitTemplate.setReturnCallback(new RabbitTemplate.ReturnCallback() {
             @Override
             public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
-                System.out.println("消失丢失");
+               logger.info("消息丢失:{}",message);
             }
         });
         return rabbitTemplate;
@@ -85,7 +88,7 @@ public class RabbitMQConfig {
 
     @Bean(name = "multiListenerContainer")
     public SimpleRabbitListenerContainerFactory multiListenerContainer(){
-        // TODO 不配这两个不会显示消息发送成功还是失败
+        // 不配这两个不会显示消息发送成功还是失败
         connectionFactory.setPublisherConfirms(true);
         connectionFactory.setPublisherReturns(true);
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
