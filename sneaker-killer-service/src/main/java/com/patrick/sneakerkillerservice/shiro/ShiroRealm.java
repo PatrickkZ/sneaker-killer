@@ -11,11 +11,14 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ShiroRealm extends AuthorizingRealm {
+    private static final Logger logger = LoggerFactory.getLogger(ShiroRealm.class);
 
     PropertiesConfig propertiesConfig;
     UserService userService;
@@ -65,6 +68,7 @@ public class ShiroRealm extends AuthorizingRealm {
             throw new AuthenticationException("user not exist");
         }
         if (!JWTUtil.verify(token, propertiesConfig)) {
+            logger.error("token验证失败,username:{}", username);
             throw new AuthenticationException("token verify error");
         }
         return new SimpleAuthenticationInfo(token, token, getName());

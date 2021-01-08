@@ -46,9 +46,15 @@ public class SecondKillService {
         this.snowflakeIdGenerator = new SnowflakeIdGenerator(this.propertiesConfig.getWorkerId(), this.propertiesConfig.getDatacenterId());
     }
 
+    /**
+     * 执行秒杀逻辑
+     * @param itemId 商品id
+     * @param size 鞋的尺码
+     * @param userId 用户id
+     */
     public void executeKill(Integer itemId, String size, Integer userId){
         // 这相当于对sneaker_sku这张表的一行上锁
-        String lockKey = new StringBuffer().append(itemId).append(size).append("-RedissonLock").toString();
+        String lockKey = new StringBuffer().append(userId).append(itemId).append("-RedissonLock").toString();
 
         RLock lock = redissonClient.getLock(lockKey);
         try {

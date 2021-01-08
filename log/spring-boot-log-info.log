@@ -50,3 +50,66 @@
 2021-01-08 09:11:45.849 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Line:218 - Shutting down ExecutorService 'applicationTaskExecutor'
 2021-01-08 09:11:45.920 INFO  com.zaxxer.hikari.HikariDataSource Line:350 - HikariPool-1 - Shutdown initiated...
 2021-01-08 09:11:45.929 INFO  com.zaxxer.hikari.HikariDataSource Line:352 - HikariPool-1 - Shutdown completed.
+2021-01-08 16:05:52.307 INFO  com.patrick.SneakerKillerWebApplication Line:55  - Starting SneakerKillerWebApplication using Java 14.0.2 on zhoujiandeMacBook-Pro.local with PID 2504 (/Users/patrick/Desktop/project/idea/sneaker-killer/sneaker-killer-web/target/classes started by patrick in /Users/patrick/Desktop/project/idea/sneaker-killer)
+2021-01-08 16:05:52.310 INFO  com.patrick.SneakerKillerWebApplication Line:660 - No active profile set, falling back to default profiles: default
+2021-01-08 16:05:53.257 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:250 - Multiple Spring Data modules found, entering strict repository configuration mode!
+2021-01-08 16:05:53.259 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:128 - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2021-01-08 16:05:53.286 INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate Line:188 - Finished Spring Data repository scanning in 13 ms. Found 0 Redis repository interfaces.
+2021-01-08 16:05:53.466 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'shiroConfig' of type [com.patrick.sneakerkillerservice.shiro.ShiroConfig$$EnhancerBySpringCGLIB$$db0f3cca] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.508 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'propertiesConfig' of type [com.patrick.sneakerkillerservice.config.PropertiesConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.530 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'mybatis-org.mybatis.spring.boot.autoconfigure.MybatisProperties' of type [org.mybatis.spring.boot.autoconfigure.MybatisProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.535 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration' of type [org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration$$EnhancerBySpringCGLIB$$e502bbeb] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.537 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceConfiguration$Hikari] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.544 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'spring.datasource-org.springframework.boot.autoconfigure.jdbc.DataSourceProperties' of type [org.springframework.boot.autoconfigure.jdbc.DataSourceProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.565 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'dataSource' of type [com.zaxxer.hikari.HikariDataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.730 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'sqlSessionFactory' of type [org.apache.ibatis.session.defaults.DefaultSqlSessionFactory] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.734 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'sqlSessionTemplate' of type [org.mybatis.spring.SqlSessionTemplate] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.735 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'userMapper' of type [org.mybatis.spring.mapper.MapperFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.737 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'userMapper' of type [com.sun.proxy.$Proxy63] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.738 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'userService' of type [com.patrick.sneakerkillerservice.service.UserService] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.741 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'shiroRealm' of type [com.patrick.sneakerkillerservice.shiro.ShiroRealm$$EnhancerBySpringCGLIB$$2ea61d67] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.809 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'securityManager' of type [org.apache.shiro.web.mgt.DefaultWebSecurityManager] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:53.839 INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker Line:350 - Bean 'authorizationAttributeSourceAdvisor' of type [org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-01-08 16:05:54.107 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:108 - Tomcat initialized with port(s): 8443 (http)
+2021-01-08 16:05:54.115 INFO  org.apache.catalina.core.StandardService Line:173 - Starting service [Tomcat]
+2021-01-08 16:05:54.115 INFO  org.apache.catalina.core.StandardEngine Line:173 - Starting Servlet engine: [Apache Tomcat/9.0.41]
+2021-01-08 16:05:54.191 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring embedded WebApplicationContext
+2021-01-08 16:05:54.191 INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Line:289 - Root WebApplicationContext: initialization completed in 1843 ms
+2021-01-08 16:05:54.741 INFO  org.redisson.Version Line:41  - Redisson 3.11.4
+2021-01-08 16:05:55.143 INFO  org.redisson.connection.pool.MasterPubSubConnectionPool Line:168 - 1 connections initialized for 101.200.209.136/101.200.209.136:6379
+2021-01-08 16:05:55.142 INFO  org.redisson.connection.pool.MasterConnectionPool Line:168 - 24 connections initialized for 101.200.209.136/101.200.209.136:6379
+2021-01-08 16:05:55.397 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Line:181 - Initializing ExecutorService 'applicationTaskExecutor'
+2021-01-08 16:05:55.937 INFO  org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Line:58  - Exposing 2 endpoint(s) beneath base path '/actuator'
+2021-01-08 16:05:56.041 INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer Line:220 - Tomcat started on port(s): 8443 (http) with context path ''
+2021-01-08 16:05:56.043 INFO  org.springframework.amqp.rabbit.connection.CachingConnectionFactory Line:636 - Attempting to connect to: [101.200.209.136:5672]
+2021-01-08 16:05:56.107 INFO  org.springframework.amqp.rabbit.connection.CachingConnectionFactory Line:589 - Created new connection: rabbitConnectionFactory#11826398:0/SimpleConnection@5972e3a [delegate=amqp://patrick@101.200.209.136:5672/, localPort= 53852]
+2021-01-08 16:05:58.338 INFO  com.patrick.SneakerKillerWebApplication Line:61  - Started SneakerKillerWebApplication in 6.465 seconds (JVM running for 7.403)
+2021-01-08 16:05:58.738 INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Line:173 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-01-08 16:05:58.739 INFO  org.springframework.web.servlet.DispatcherServlet Line:525 - Initializing Servlet 'dispatcherServlet'
+2021-01-08 16:05:58.741 INFO  org.springframework.web.servlet.DispatcherServlet Line:547 - Completed initialization in 2 ms
+2021-01-08 16:05:58.757 INFO  com.zaxxer.hikari.HikariDataSource Line:110 - HikariPool-1 - Starting...
+2021-01-08 16:05:59.020 INFO  com.zaxxer.hikari.HikariDataSource Line:123 - HikariPool-1 - Start completed.
+2021-01-08 16:08:05.518 INFO  com.patrick.sneakerkillerweb.controller.LoginController Line:59  - user patrick login
+2021-01-08 16:08:15.655 INFO  com.patrick.sneakerkillerservice.config.RabbitMQConfig Line:77  - 消息发送成功:null
+2021-01-08 16:08:15.724 INFO  com.patrick.sneakerkillerservice.service.SendMessageService Line:62  - 发送消息:{"itemId":1,"size":"42","userId":2}
+2021-01-08 16:08:15.733 INFO  com.patrick.sneakerkillerservice.service.SecondKillService Line:73  - 库存扣减成功 userId:2, itemId: 1, size: 42
+2021-01-08 16:08:15.740 INFO  com.patrick.sneakerkillerservice.service.SecondKillService Line:112 - 创建订单:{"createTime":null,"id":797134587624300544,"itemCount":1,"itemId":1,"itemName":null,"itemPrice":1099.00,"payTime":null,"shoeSize":"42","status":0,"userId":2}
+2021-01-08 16:08:15.770 INFO  com.patrick.sneakerkillerservice.service.SecondKillService Line:117 - 订单入库:orderID:797134587624300544
+2021-01-08 16:08:15.774 INFO  com.patrick.sneakerkillerservice.service.SendMessageService Line:105 - 发送消息订单id797134587624300544
+2021-01-08 16:08:15.787 INFO  com.patrick.sneakerkillerservice.config.RabbitMQConfig Line:77  - 消息发送成功:null
+2021-01-08 16:08:15.806 INFO  com.patrick.sneakerkillerservice.service.SendMessageService Line:82  - 发送消息: 766780635@qq.com
+2021-01-08 16:08:15.816 INFO  com.patrick.sneakerkillerservice.config.RabbitMQConfig Line:77  - 消息发送成功:null
+2021-01-08 16:08:15.817 INFO  com.patrick.sneakerkillerservice.service.ReceiveMessageService Line:64  - 发送邮件至:766780635@qq.com
+2021-01-08 16:08:45.806 INFO  com.patrick.sneakerkillerservice.service.ReceiveMessageService Line:52  - 订单超时未支付, 订单编号:797134587624300544
+2021-01-08 16:13:03.860 INFO  org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer Line:634 - Waiting for workers to finish.
+2021-01-08 16:13:04.485 INFO  org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer Line:637 - Successfully waited for workers to finish.
+2021-01-08 16:13:04.769 INFO  org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer Line:634 - Waiting for workers to finish.
+2021-01-08 16:13:05.161 INFO  org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer Line:637 - Successfully waited for workers to finish.
+2021-01-08 16:13:05.376 INFO  org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer Line:634 - Waiting for workers to finish.
+2021-01-08 16:13:05.552 INFO  org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer Line:637 - Successfully waited for workers to finish.
+2021-01-08 16:13:05.593 INFO  org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer Line:1284 - Shutdown ignored - container is not active already
+2021-01-08 16:13:05.595 INFO  org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer Line:1284 - Shutdown ignored - container is not active already
+2021-01-08 16:13:05.598 INFO  org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer Line:1284 - Shutdown ignored - container is not active already
+2021-01-08 16:13:05.602 INFO  org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Line:218 - Shutting down ExecutorService 'applicationTaskExecutor'
+2021-01-08 16:13:05.722 INFO  com.zaxxer.hikari.HikariDataSource Line:350 - HikariPool-1 - Shutdown initiated...
+2021-01-08 16:13:05.734 INFO  com.zaxxer.hikari.HikariDataSource Line:352 - HikariPool-1 - Shutdown completed.

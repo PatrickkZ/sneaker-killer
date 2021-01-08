@@ -1,5 +1,6 @@
 package com.patrick.sneakerkillerservice.dto;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class SecondKillDto {
@@ -7,6 +8,7 @@ public class SecondKillDto {
      * 商品id
      */
     @NotNull(message = "item id can not be null")
+    @Min(1)
     private Integer itemId;
 
     /**
