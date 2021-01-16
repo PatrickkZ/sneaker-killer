@@ -1,0 +1,3 @@
+2021-01-10 23:22:22.578 ERROR com.patrick.sneakerkillerservice.shiro.ShiroRealm Line:71  - token验证失败,username:patrick
+2021-01-10 23:22:37.145 ERROR com.patrick.sneakerkillerservice.service.SecondKillService Line:79  - 用户重复购买userId:2,itemId1
+2021-01-10 23:23:02.291 ERROR com.patrick.sneakerkillerservice.service.SecondKillService Line:79  - 用户重复购买userId:2,itemId1
